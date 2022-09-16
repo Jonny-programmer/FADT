@@ -1,10 +1,14 @@
 from fastapi import Depends, FastAPI
 
-from .dependencies import get_token_header
+from .dependencies import get_token_header, get_db
 from .internal import admin
 from .routers import items, users
 # Можно вместо этого absolute import: from app.routers import items, users
+from app.db import crud, models, schemas
+from app.db.database import SessionLocal, engine
 
+
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(dependencies=[Depends(get_token_header)])
 
