@@ -1,13 +1,35 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+import sqlalchemy as sa
+import sqlalchemy.orm as orm
+from sqlalchemy.orm import Session, sessionmaker
+import sqlalchemy.ext.declarative as dec
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./data/FADT_main_database.db"
-# SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
+Base = dec.declarative_base()
 
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+__factory = None
 
-Base = declarative_base()
+
+def global_init(db_file):
+    global __factory
+
+    if __factory:
+        return
+
+    if not db_file or not db_file.strip():
+        raise Exception("Необходимо указать файл базы данных.")
+
+    conn_str = f'sqlite:///{db_file.strip()}?check_same_thread=False'
+    print(f"Подключение к базе данных по адресу {conn_str}")
+
+    engine = sa.create_engine(conn_str, pool_pre_ping=True, echo=True, connect_args={"check_same_thread": False})
+    # Если установить echo=True, то в консоль будут выводиться все SQL-запросы
+    # Не нужно - поставьте False
+    __factory = orm.sessionmaker(bind=engine)
+
+    from app.db import __all_models
+
+    Base.metadata.create_all(engine)
+
+
+def create_session() -> Session:
+    global __factory
+    return __factory()

@@ -5,10 +5,11 @@ from .internal import admin
 from .routers import items, users
 # Можно вместо этого absolute import: from app.routers import items, users
 from app.db import crud, models, schemas
-from app.db.database import SessionLocal, engine
+from app.db import database
 
 
-models.Base.metadata.create_all(bind=engine)
+database.global_init("app/db/data/FADT_database.db")
+
 
 app = FastAPI(dependencies=[Depends(get_token_header)])
 

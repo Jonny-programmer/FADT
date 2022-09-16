@@ -1,7 +1,7 @@
 from fastapi import Header, HTTPException
 
 # noinspection PyArgumentList
-from app.db.database import SessionLocal
+from app.db import database
 
 
 async def get_token_header(x_token: str = Header(default=None)):
@@ -15,8 +15,8 @@ async def get_query_token(token: str):
 
 
 async def get_db():
-    db = SessionLocal()
+    db_session = database.create_session()
     try:
-        yield db
+        yield db_session
     finally:
-        db.close()
+        db_session.close()
