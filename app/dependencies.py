@@ -1,11 +1,12 @@
 from fastapi import Header, HTTPException
 
 # noinspection PyArgumentList
+from app.config import SECRET_KEY
 from app.db import database
 
 
 async def get_token_header(x_token: str = Header(default=None)):
-    if x_token != "super-secret-token":
+    if x_token != SECRET_KEY:
         raise HTTPException(status_code=400, detail="X-Token header invalid")
 
 

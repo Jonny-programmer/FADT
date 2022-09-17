@@ -1,17 +1,15 @@
 from fastapi import Depends, FastAPI
 
-from .dependencies import get_token_header, get_db
+# Можно вместо этого absolute import: from app.routers import items, users
+from app.db import database
+from .dependencies import get_token_header
 from .internal import admin
 from .routers import items, users
-# Можно вместо этого absolute import: from app.routers import items, users
-from app.db import crud, models, schemas
-from app.db import database
-
-
-database.global_init("app/db/data/FADT_database.db")
-
+from app.config import *
 
 app = FastAPI(dependencies=[Depends(get_token_header)])
+
+database.global_init(SQLALCHEMY_DATABASE_URI)
 
 app.include_router(users.router)
 app.include_router(items.router)
