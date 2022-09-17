@@ -1,5 +1,4 @@
 from fastapi import Depends, FastAPI
-
 # Можно вместо этого absolute import: from app.routers import items, users
 from app.db import database
 from .dependencies import get_token_header

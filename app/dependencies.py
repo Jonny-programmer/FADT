@@ -1,8 +1,11 @@
 from fastapi import Header, HTTPException
+from fastapi.security import OAuth2PasswordBearer
 
-# noinspection PyArgumentList
 from app.config import SECRET_KEY
 from app.db import database
+
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 async def get_token_header(x_token: str = Header(default=None)):
