@@ -24,7 +24,9 @@ import os
 sys.path.insert(0, os.getcwd())
 from app.db.database import Base
 import app.db.__all_models
+
 target_metadata = Base.metadata
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

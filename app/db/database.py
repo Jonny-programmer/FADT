@@ -17,10 +17,12 @@ def global_init(db_file):
     if not db_file or not db_file.strip():
         raise Exception("Необходимо указать файл базы данных.")
 
-    conn_str = f'{db_file.strip()}?check_same_thread=False'
+    # conn_str = f'{db_file.strip()}?check_same_thread=False'
+    conn_str = db_file.strip()
     print(f"Подключение к базе данных по адресу {conn_str}")
 
-    engine = sa.create_engine(conn_str, pool_pre_ping=True, echo=False, connect_args={"check_same_thread": False})
+    # engine = sa.create_engine(conn_str, pool_pre_ping=True, echo=False, connect_args={"check_same_thread": False})
+    engine = sa.create_engine(conn_str, pool_pre_ping=True, echo=False)
     # Если установить echo=True, то в консоль будут выводиться все SQL-запросы
     # Не нужно - поставьте False
     __factory = orm.sessionmaker(bind=engine)
