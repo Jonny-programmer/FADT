@@ -1,0 +1,51 @@
+.dropbtn {
+    content: '▶ ';
+    cursor: pointer;
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    display: block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+    
+}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show{
+    display:block;
+}
+
+
+
+.menu .title::before {
+    
+    font-size: 80%;
+    color: green;
+}
+
+
+.menu.open .title::before {
+    content: '▼ ';
+}
+
+.menu.open ul {
+    display: block;
+}
