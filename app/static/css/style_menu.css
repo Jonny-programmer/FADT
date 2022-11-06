@@ -1,6 +1,11 @@
+li {
+    text-decoration: none;
+    margin: 0;
+    padding: 5px;
+}
+
 .dropbtn {
-    content: '▶ ';
-    cursor: pointer;
+    
 }
 
 /* Dropdown button on hover & focus */
@@ -16,6 +21,8 @@
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     display: none;
+    transition-duration: 1s;
+    transition: 1s;
 }
 
 /* Links inside the dropdown */
@@ -29,22 +36,11 @@
 }
 
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show{
-    display:block;
+.show {
+    display: block;
+    transition: 1s;
 }
 
-
-
-.menu .title::before {
-    
-    font-size: 80%;
-    color: green;
-}
-
-
-.menu.open .title::before {
-    content: '▼ ';
-}
 
 .menu.open ul {
     display: block;

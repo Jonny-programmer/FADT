@@ -7,7 +7,7 @@ function openMenu(id) {
 
 // Close the dropdown menu if the user clicks outside of it
 window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
+  if (!event.target.matches('.dropbtn')) { // all is ok
 
     var dropdowns = document.getElementsByClassName("dropdown-content");
     var i;
