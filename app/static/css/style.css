@@ -20,6 +20,24 @@
     --color5: #f1f1f0;
 }
 
+@keyframes skedsAnima {
+    0% {
+        border-color: var(--color1);
+    }
+    20% {
+        border-color: var(--color2);
+    }
+    40% {
+        border-color: var(--color3);
+    }
+    60% {
+        border-color: var(--color4);
+    }
+    80% {
+        border-color: var(--color5);
+    }
+}
+
 @font-face {
     font-family: 'Europe';
     src: url('../fonts/europe-normal.ttf');
@@ -29,16 +47,17 @@ body {
     text-align: center;
     font-family: 'Europe';
     display: grid;
-    grid-template-columns: 15vw 10vw 50vw 25vw;
-    grid-template-rows: 15vw 85vh;
+    grid-template-columns: 15vw 10vw 5vw 45vw 25vw;
+    grid-template-rows: 15vw 5vh calc(95vh - 15vw);
     margin: 0;
     color: var(--color1);
 }
 header {
-    font-size: 25px;
+    font-size: 17px;
+    padding: 20px;
     text-align: center;
     grid-column-start: 2;
-    grid-column-end: 5;
+    grid-column-end: 6;
     grid-row-start: 1;
     grid-row-end: 2;
     color: var(--color5);
@@ -50,24 +69,25 @@ nav {
     grid-column-start: 1;
     grid-column-end: 3;
     grid-row-start: 2;
-    grid-row-end: 3;
+    grid-row-end: 4;
     position: sticky;
     width: auto;
     padding: 5px;
-    overflow: scroll;
+    overflow: auto;
 }
 .news {
     grid-column-start: 3;
-    grid-column-end: 3;
-    grid-row-start: 2;
-    grid-row-end: 3;
+    grid-column-end: 5;
+    grid-row-start: 3;
+    grid-row-end: 4;
     background-color: var(--color5);
+    overflow: auto;
 }
 .notices {
-    grid-column-start: 4;
-    grid-column-end: 4;
-    grid-row-start: 2s;
-    grid-row-end: 3;
+    grid-column-start: 5;
+    grid-column-end: 6;
+    grid-row-start: 2;
+    grid-row-end: 4;
     color: var(--color5);
     background-color: var(--color3);
 
@@ -84,18 +104,26 @@ nav {
     margin: 7px;
 }
 
-.menu-item {
-    color: var(--color5);
-    display: block;
-    width: 100%;
+.skeds {
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    background-color: var(--color4);
     padding: 5px;
-    border-bottom: 1px solid var(--color4);
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    margin: 0;
+}
+.skeds-link {
+    color: var(--color2);
+    border: 2px solid transparent;
+}
+.skeds:hover > .border-link{
+    border-top-color: var(--color4);
+    border-bottom-color: var(--color2);
+    border-left-color: var(--color3);
+    border-right-color: var(--color1);
 }
 
-a {
-    text-decoration: none;
-    color: var(--color5);
-}
-a:hover {
-    color: black;
-}
