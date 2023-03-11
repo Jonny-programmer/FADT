@@ -49,15 +49,6 @@ app.include_router(
     responses={418: {"description": "I'm a teapot"}},
 )
 
-fake_users_db = {
-    "jonny": {
-        "username": "jonny",
-        "full_name": "John E.",
-        "email": "real_boss@example.com",
-        "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
-        "is_active": True,
-    }
-}
 
 
 def create_access_token(data: dict, expires_delta: timedelta):
