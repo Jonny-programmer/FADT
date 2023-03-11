@@ -21,7 +21,7 @@ async def get_token_header(x_token: str = Header(default=None)):
         raise HTTPException(status_code=400, detail="X-Token header invalid")
 
 
-async def get_db_session():
+def get_db_session():
     db_session = database.create_session()
     try:
         yield db_session

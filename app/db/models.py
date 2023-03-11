@@ -1,11 +1,5 @@
-import uuid
-from datetime import datetime
-from enum import unique
-from hashlib import md5
-
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, VARCHAR, Table
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-from werkzeug.security import generate_password_hash, check_password_hash
 
 from .database import Base
 
@@ -15,6 +9,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
+    full_name = Column(String, nullable=True)
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)

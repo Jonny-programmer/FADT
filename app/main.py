@@ -5,7 +5,6 @@ from fastapi import Depends, FastAPI, HTTPException, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from jose import JWTError, jwt
-from sqlalchemy.orm import Session
 
 from app.config import *
 from app.db import database
@@ -19,8 +18,9 @@ from .routers import items, users
 # app = FastAPI(dependencies=[Depends(oauth2_scheme)])
 app = FastAPI()
 
-# database.global_init(SQLALCHEMY_DATABASE_URI)
-
+database.global_init(SQLALCHEMY_DATABASE_URI)
+db_session = get_db_session()
+print(f"----> DB_session = {db_session}: {type(db_session)}")
 origins = [
     "http://localhost.domain_name.com",
     "https://localhost.com",
@@ -71,16 +71,18 @@ def create_access_token(data: dict, expires_delta: timedelta):
     return encoded_jwt
 
 
-def authenticate_user(username: str, password: str, db: Session = Depends(get_db_session)):
-    user = get_user_by_username(db, username)
+def authenticate_user(username: str, password: str):
+    db_sess = database.create_session()
+    user = get_user_by_username(db_sess, username)
+    print(user, type(user))
     if not user:
         return False
-    if not verify_password(password, user.password):
+    if not verify_password(password, user.hashed_password):
         return False
     return user
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db_session)):
+async def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -95,7 +97,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = get_user_by_username(db, username=token_data.username)
+    db_sess = database.create_session()
+    user = get_user_by_username(db_sess, username=token_data.username)
     if user is None:
         raise credentials_exception
     return user
@@ -109,7 +112,7 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
 
 @app.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(fake_users_db, form_data.username, form_data.password)
+    user = authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -134,13 +137,13 @@ async def read_own_items(current_user: User = Depends(get_current_active_user)):
     return [{"item_name": "Computer", "owner": current_user.username}]
 
 
-@app.middleware("http")
-async def add_process_time_header(request: Request, call_next):
-    start_time = time.time()
-    response = await call_next(request)
-    process_time = time.time() - start_time
-    response.headers["X-Process-Time"] = str(process_time)
-    return response
+# @app.middleware("http")
+# async def add_process_time_header(request: Request, call_next):
+#     start_time = time.time()
+#     response = await call_next(request)
+#     process_time = time.time() - start_time
+#     response.headers["X-Process-Time"] = str(process_time)
+#     return response
 
 
 @app.get("/")
