@@ -7,7 +7,7 @@ from ..dependencies import get_db_session, oauth2_scheme
 router = APIRouter(
     prefix="/users",
     tags=["users"],
-    dependencies=[Depends(oauth2_scheme)],
+    # dependencies=[Depends(oauth2_scheme)],
     responses={404: {"description": "Not found"}},
 )
 

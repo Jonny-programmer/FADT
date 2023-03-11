@@ -7,7 +7,8 @@ from .internal import admin
 from .routers import items, users
 
 # Можно вместо этого absolute import: from app.routers import items, users
-app = FastAPI(dependencies=[Depends(oauth2_scheme)])
+# app = FastAPI(dependencies=[Depends(oauth2_scheme)])
+app = FastAPI()
 
 database.global_init(SQLALCHEMY_DATABASE_URI)
 

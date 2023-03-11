@@ -14,7 +14,7 @@ async def get_token_header(x_token: str = Header(default=None)):
 
 async def get_query_token(token: str):
     if token.lower() != "jessika":
-        raise HTTPException(status_code=400, detail="No Jessica token provided")
+        raise HTTPException(status_code=400, detail="No Jessika token provided")
 
 
 async def get_db_session():
