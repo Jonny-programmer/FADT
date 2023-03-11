@@ -1,2 +1,2 @@
 # FADT
-Fast API with Docker for tgym.ru
+Fast API project for tgym.ru
