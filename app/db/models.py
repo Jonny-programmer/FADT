@@ -14,22 +14,12 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     birth_date = Column(DateTime, nullable=True)
     blogs = relationship('Blog', back_populates='author')
-    items = relationship("Item", back_populates="owner")
     posts = relationship('Post', back_populates='author')
     skeds = relationship('Sked', back_populates='creator')
     videos = relationship('Video', back_populates='creator')
     photoalbums = relationship('Video', back_populates='creator')
-
-
-
-class Item(Base):
-    __tablename__ = "items"
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String, index=True)
-    owner_id = Column(Integer, ForeignKey("users.id"))
-    owner = relationship("User", back_populates="items")
-
+    teacher = relationship('Teacher', uselist=False, back_populates='user')
+    pupil = relationship('Pupil', uselist=False, back_populates='user')
 # class AdultUser(Base):
 #     __tablename__ = "users"
 #     id = Column(Integer, primary_key=True, unique=True)
@@ -64,6 +54,7 @@ class Blog(Base):
     author_id = Column(Integer, ForeignKey("users.id"))
     author = relationship("User", back_populates="blogs")
     photo_source = Column(String, nullable=False)
+    grade = relationship('Grade', uselist=False, back_populates='blog')
 
 
 class Post(Base):
@@ -116,3 +107,49 @@ class Photo(Base):
     photoalbum_id = Column(Integer, ForeignKey('photoalbums.id'))
     photoalbum = relationship('PhotoAlbum', back_populates='photos')
 
+
+class Teacher(Base):
+    __tablename__ = 'teachers'
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    surname = Column(String, nullable=False)
+    photo_source = Column(String, nullable=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship('User', back_populates='teacher')
+    grade = relationship('Grade', uselist=False, back_populates='monitor')
+    birthdate = Column(Date, default=date.today())
+
+
+class Grade(Base):
+    __tablename__ = 'grades'
+    id = Column(Integer, primary_key=True, index=True)
+    year_grad = Column(Date, nullable=False)
+    photo_source = Column(String, nullable=True)
+    monitor_id = Column(Integer, ForeignKey('teachers.id'))
+    monitor = relationship('Teacher', back_populates='grade')
+    blog_id = Column(Integer, ForeignKey("blogs.id"))
+    blog = relationship("Blog", back_populates="grade")
+    pupils = relationship('Pupil', back_populates='grade')
+    hws = relationship('Hw', back_populates='grade')
+
+
+class Pupil(Base):
+    __tablename__ = 'pupils'
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    surname = Column(String, nullable=False)
+    photo_source = Column(String, nullable=True)
+    birthdate = Column(Date, default=date.today())
+    grade_id = Column(Integer, ForeignKey('grades.id'))
+    grade = relationship('Grade', back_populates='pupil')
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship('User', back_populates='pupil')
+
+
+class Hw(Base):
+    __tablename__ = 'hws'
+    id = Column(Integer, primary_key=True, index=True)
+    date = Column(Date, default=date.today())
+    text = Column(Text, nullable=True)
+    grade_id = Column(Integer, ForeignKey('grades.id'))
+    grade = relationship('Grade', back_populates='hw')
