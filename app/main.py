@@ -5,6 +5,9 @@ from fastapi import Depends, FastAPI, HTTPException, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from jose import JWTError, jwt
+from starlette.responses import HTMLResponse
+from starlette.staticfiles import StaticFiles
+from starlette.templating import Jinja2Templates
 
 from app.config import *
 from app.db import database
@@ -18,24 +21,33 @@ from .routers import items, users
 # app = FastAPI(dependencies=[Depends(oauth2_scheme)])
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory=f"app/{STATIC_FOLDER}"), name="static")
+templates = Jinja2Templates(directory=f"app/{TEMPLATE_FOLDER}")
+
+
 database.global_init(SQLALCHEMY_DATABASE_URI)
 db_session = get_db_session()
-print(f"----> DB_session = {db_session}: {type(db_session)}")
-origins = [
-    "http://localhost.domain_name.com",
-    "https://localhost.com",
-    "http://localhost",
-    "https://localhost"
-    "http://localhost:8080",
-]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+# origins = [
+#     "http://localhost.domain_name.com",
+#     "https://localhost.com",
+#     "http://localhost",
+#     "https://localhost"
+#     "http://localhost:8080",
+# ]
+#
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 app.include_router(users.router)
 app.include_router(items.router)
@@ -48,7 +60,6 @@ app.include_router(
     dependencies=[Depends(get_token_header)],
     responses={418: {"description": "I'm a teapot"}},
 )
-
 
 
 def create_access_token(data: dict, expires_delta: timedelta):
@@ -135,8 +146,3 @@ async def read_own_items(current_user: User = Depends(get_current_active_user)):
 #     process_time = time.time() - start_time
 #     response.headers["X-Process-Time"] = str(process_time)
 #     return response
-
-
-@app.get("/")
-async def root():
-    return {'message': 'Hello from the fastapi application!!'}
