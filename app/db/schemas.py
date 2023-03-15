@@ -24,6 +24,10 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(args, kwargs)
+        self.email = None
+
     password: str
     email: str
     full_name: str

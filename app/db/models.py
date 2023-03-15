@@ -20,6 +20,8 @@ class User(Base):
     photoalbums = relationship('PhotoAlbum', back_populates='creator')
     teacher = relationship('Teacher', uselist=False, back_populates='user')
     pupil = relationship('Pupil', uselist=False, back_populates='user')
+
+
 # class AdultUser(Base):
 #     __tablename__ = "users"
 #     id = Column(Integer, primary_key=True, unique=True)

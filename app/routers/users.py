@@ -2,12 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..db import crud, schemas
-from ..dependencies import get_db_session, oauth2_scheme
+from ..dependencies import get_db_session
 
 router = APIRouter(
     prefix="/users",
     tags=["users"],
-    # dependencies=[Depends(oauth2_scheme)],
     responses={404: {"description": "Not found"}},
 )
 
