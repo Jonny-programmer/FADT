@@ -25,6 +25,8 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+    email: str
+    full_name: str
 
 
 class User(UserBase):

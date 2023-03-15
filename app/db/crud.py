@@ -26,9 +26,9 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_user(db: Session, user: schemas.UserCreate):
-    # fix that later, the code needed is in main.py
     password_hash = get_password_hash(user.password)
-    db_user = models.User(username=user.username, hashed_password=password_hash)
+    db_user = models.User(username=user.username, email=user.email,
+                          full_name=user.full_name, hashed_password=password_hash)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)

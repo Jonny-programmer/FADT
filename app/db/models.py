@@ -17,7 +17,7 @@ class User(Base):
     posts = relationship('Post', back_populates='author')
     skeds = relationship('Sked', back_populates='creator')
     videos = relationship('Video', back_populates='creator')
-    photoalbums = relationship('Video', back_populates='creator')
+    photoalbums = relationship('PhotoAlbum', back_populates='creator')
     teacher = relationship('Teacher', uselist=False, back_populates='user')
     pupil = relationship('Pupil', uselist=False, back_populates='user')
 # class AdultUser(Base):
@@ -55,6 +55,7 @@ class Blog(Base):
     author = relationship("User", back_populates="blogs")
     photo_source = Column(String, nullable=False)
     grade = relationship('Grade', uselist=False, back_populates='blog')
+    posts = relationship('Post', back_populates='blog')
 
 
 class Post(Base):
@@ -141,7 +142,7 @@ class Pupil(Base):
     photo_source = Column(String, nullable=True)
     birthdate = Column(Date, default=date.today())
     grade_id = Column(Integer, ForeignKey('grades.id'))
-    grade = relationship('Grade', back_populates='pupil')
+    grade = relationship('Grade', back_populates='pupils')
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship('User', back_populates='pupil')
 
@@ -152,4 +153,4 @@ class Hw(Base):
     date = Column(Date, default=date.today())
     text = Column(Text, nullable=True)
     grade_id = Column(Integer, ForeignKey('grades.id'))
-    grade = relationship('Grade', back_populates='hw')
+    grade = relationship('Grade', back_populates='hws')
